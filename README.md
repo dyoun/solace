@@ -131,3 +131,111 @@ npm run test:watch
 ```
 
 This ensures immediate feedback on code changes and helps maintain test coverage as the application evolves.
+
+## Docker Support
+
+This project includes full Docker support for containerized deployment.
+
+### Docker Files
+
+The project includes the following Docker-related files:
+- `solace-candidate-assignment-main/Dockerfile` - Multi-stage production Docker build
+- `solace-candidate-assignment-main/.dockerignore` - Optimized file exclusions for Docker builds
+- `solace-candidate-assignment-main/next.config.mjs` - Configured with standalone output for Docker
+
+### Local Docker Build and Run
+
+Build the Docker image:
+```bash
+cd solace-candidate-assignment-main
+docker build -t solace-advocates .
+```
+
+Run the container:
+```bash
+docker run -p 3000:3000 solace-advocates
+```
+
+The application will be available at `http://localhost:3000`.
+
+### Docker Image Features
+
+- **Multi-stage Build** - Optimized for production with minimal image size  
+- **Alpine Linux** - Lightweight base image (~5MB)  
+- **Multi-platform** - Supports both `linux/amd64` and `linux/arm64`  
+- **Security** - Runs as non-root user (`nextjs:nodejs`)  
+- **Standalone Output** - Self-contained server bundle  
+- **Layer Caching** - Optimized for faster subsequent builds
+
+## CI/CD with GitHub Actions
+
+The project includes automated CI/CD pipelines with GitHub Actions.
+
+### Test Pipeline (`.github/workflows/test.yml`)
+
+**Triggers:**
+- Push to `main` and `develop` branches  
+- Pull requests to `main` and `develop` branches
+
+**Features:**
+- **Multi-Node Testing** - Tests on Node.js 18.x and 20.x
+- **Test Coverage** - Generates and uploads coverage reports
+- **Quality Checks** - Runs linting and type checking if available
+- **Fast Execution** - Uses npm cache and optimized Ubuntu runners
+
+**Commands:**
+```bash
+# Tests run automatically on push/PR, but you can also run manually:
+npm test -- --coverage --watchAll=false
+npm run lint      # if available
+npm run typecheck # if available
+```
+
+### Docker Pipeline (`.github/workflows/docker.yml`)
+
+**Triggers:**
+- Push to `main` and `develop` branches
+- Pull requests to `main` branch  
+- Release publications
+
+**Features:**
+- **Container Registry** - Pushes to GitHub Container Registry (`ghcr.io`)
+- **Smart Tagging** - Automatic semantic versioning and branch-based tags
+- **Multi-platform Builds** - Supports AMD64 and ARM64 architectures
+- **Security** - Includes build attestation for supply chain security
+- **Caching** - GitHub Actions cache for faster builds
+
+### Container Registry
+
+Images are automatically built and published to:
+```
+ghcr.io/dyoun/{repo}/solace/packages
+```
+
+**Available Tags:**
+- `latest` - Latest stable build from main branch
+- `develop` - Latest development build  
+- `pr-{number}` - Pull request builds
+- `v1.0.0`, `1.0`, `1` - Semantic version tags from releases
+
+### Pull and Run Published Image
+
+```bash
+# Pull the latest published image
+docker pull ghcr.io/{username}/{repo}/solace-advocates:latest
+
+# Run the published container
+docker run -p 3000:3000 ghcr.io/{username}/{repo}/solace-advocates:latest
+```
+
+### Deployment Ready
+
+The Docker images are production-ready and can be deployed to:
+- **Kubernetes** clusters
+- **Docker Swarm** 
+- **Cloud Run** (Google Cloud)
+- **Container Instances** (Azure)
+- **ECS/Fargate** (AWS)
+- **Railway**, **Fly.io**, **Render**, etc.
+
+The CI/CD pipelines ensure that every code change is automatically tested and containerized, providing a robust deployment workflow for the Solace Advocates application.
