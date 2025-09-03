@@ -113,16 +113,17 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {filteredAdvocates.map((advocate, index) => {
+          {filteredAdvocates.map((advocate) => {
+            const uniqueKey = `${advocate.firstName}-${advocate.lastName}-${advocate.phoneNumber}`;
             return (
-              <tr key={index}>
+              <tr key={uniqueKey}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
                 <td>{advocate.degree}</td>
                 <td>
-                  {advocate.specialties.map((s, i) => (
-                    <div key={i}>{s}</div>
+                  {advocate.specialties.map((specialty) => (
+                    <div key={specialty}>{specialty}</div>
                   ))}
                 </td>
                 <td>{advocate.yearsOfExperience}</td>
