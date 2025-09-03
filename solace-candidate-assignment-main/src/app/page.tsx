@@ -48,7 +48,7 @@ export default function Home(): JSX.Element {
   }, []);
 
   /**
-   * Handles search input changes and filters advocates
+   * Handles search input changes and filters advocates with multi-term support
    * @param e - Input change event
    */
   const onChange: InputChangeHandler = (e) => {
@@ -56,17 +56,29 @@ export default function Home(): JSX.Element {
     setSearchTerm(term);
 
     console.log("filtering advocates...");
+    
+    if (!term.trim()) {
+      setFilteredAdvocates(advocates);
+      return;
+    }
+
+    // Split search terms by spaces and filter out empty strings
+    const searchTerms = term.toLowerCase().trim().split(/\s+/).filter(t => t.length > 0);
+    
     const filtered = advocates.filter((advocate) => {
-      const searchTerm = term.toLowerCase();
-      return (
-        advocate.firstName.toLowerCase().includes(searchTerm) ||
-        advocate.lastName.toLowerCase().includes(searchTerm) ||
-        advocate.city.toLowerCase().includes(searchTerm) ||
-        advocate.degree.toLowerCase().includes(searchTerm) ||
-        advocate.specialties.some(specialty => specialty.toLowerCase().includes(searchTerm)) ||
-        advocate.yearsOfExperience.toString().includes(searchTerm) ||
-        advocate.phoneNumber.toString().includes(searchTerm)
-      );
+      // Create a searchable text for each advocate
+      const searchableText = [
+        advocate.firstName.toLowerCase(),
+        advocate.lastName.toLowerCase(),
+        advocate.city.toLowerCase(),
+        advocate.degree.toLowerCase(),
+        ...advocate.specialties.map(s => s.toLowerCase()),
+        advocate.yearsOfExperience.toString(),
+        advocate.phoneNumber.toString()
+      ].join(' ');
+
+      // All search terms must be found somewhere in the advocate's data
+      return searchTerms.every(searchTerm => searchableText.includes(searchTerm));
     });
 
     setFilteredAdvocates(filtered);
@@ -132,7 +144,7 @@ export default function Home(): JSX.Element {
                 <input
                   id="search"
                   type="text"
-                  placeholder="Search by name, city, degree, specialties, experience, or phone..."
+                  placeholder="Search by multiple terms, e.g., 'john md' or 'anxiety therapist'..."
                   value={searchTerm}
                   onChange={onChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -146,9 +158,19 @@ export default function Home(): JSX.Element {
               </button>
             </div>
             {searchTerm && (
-              <p className="mt-2 text-sm text-gray-600">
-                Searching for: <span className="font-medium text-indigo-600">{searchTerm}</span>
-              </p>
+              <div className="mt-2">
+                <p className="text-sm text-gray-600 mb-1">Searching for:</p>
+                <div className="flex flex-wrap gap-1">
+                  {searchTerm.toLowerCase().trim().split(/\s+/).filter(t => t.length > 0).map((term, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full"
+                    >
+                      {term}
+                    </span>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         </div>
