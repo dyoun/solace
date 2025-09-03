@@ -1,4 +1,8 @@
-## Solace Candidate Assignment
+# Solace Candidate Assignment
+
+[![Test Suite](https://github.com/dyoun/solace/actions/workflows/test.yml/badge.svg)](https://github.com/dyoun/solace/actions/workflows/test.yml)
+[![Docker Build](https://github.com/dyoun/solace/actions/workflows/docker.yml/badge.svg)](https://github.com/dyoun/solace/actions/workflows/docker.yml)
+[![GitHub Container Registry](https://img.shields.io/badge/ghcr.io-packages-blue)](https://github.com/dyoun/solace/pkgs/container/solace%2Fpackages)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
