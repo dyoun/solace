@@ -8,7 +8,7 @@ interface Advocate {
   city: string;
   degree: string;
   specialties: string[];
-  yearsOfExperience: string;
+  yearsOfExperience: number;
   phoneNumber: string;
 }
 
@@ -16,15 +16,30 @@ export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
+    const fetchAdvocates = async () => {
+      try {
+        console.log("fetching advocates...");
+        const response = await fetch("/api/advocates");
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const jsonResponse = await response.json();
         setAdvocates(jsonResponse.data);
         setFilteredAdvocates(jsonResponse.data);
-      });
-    });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch advocates");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdvocates();
   }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +53,8 @@ export default function Home() {
         advocate.lastName.includes(term) ||
         advocate.city.includes(term) ||
         advocate.degree.includes(term) ||
-        advocate.specialties.includes(term) ||
-        advocate.yearsOfExperience.includes(term)
+        advocate.specialties.some(specialty => specialty.includes(term)) ||
+        advocate.yearsOfExperience.toString().includes(term)
       );
     });
 
@@ -48,8 +63,27 @@ export default function Home() {
 
   const onClick = () => {
     console.log(advocates);
+    setSearchTerm("");
     setFilteredAdvocates(advocates);
   };
+
+  if (loading) {
+    return (
+      <main style={{ margin: "24px" }}>
+        <h1>Solace Advocates</h1>
+        <p>Loading advocates...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main style={{ margin: "24px" }}>
+        <h1>Solace Advocates</h1>
+        <p style={{ color: "red" }}>Error: {error}</p>
+      </main>
+    );
+  }
 
   return (
     <main style={{ margin: "24px" }}>
@@ -61,7 +95,7 @@ export default function Home() {
         <p>
           Searching for: <span>{searchTerm}</span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
+        <input style={{ border: "1px solid black" }} value={searchTerm} onChange={onChange} />
         <button onClick={onClick}>Reset Search</button>
       </div>
       <br />
