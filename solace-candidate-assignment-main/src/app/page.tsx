@@ -8,7 +8,7 @@ interface Advocate {
   city: string;
   degree: string;
   specialties: string[];
-  yearsOfExperience: string;
+  yearsOfExperience: number;
   phoneNumber: string;
 }
 
@@ -53,8 +53,8 @@ export default function Home() {
         advocate.lastName.includes(term) ||
         advocate.city.includes(term) ||
         advocate.degree.includes(term) ||
-        advocate.specialties.includes(term) ||
-        advocate.yearsOfExperience.includes(term)
+        advocate.specialties.some(specialty => specialty.includes(term)) ||
+        advocate.yearsOfExperience.toString().includes(term)
       );
     });
 
@@ -63,8 +63,27 @@ export default function Home() {
 
   const onClick = () => {
     console.log(advocates);
+    setSearchTerm("");
     setFilteredAdvocates(advocates);
   };
+
+  if (loading) {
+    return (
+      <main style={{ margin: "24px" }}>
+        <h1>Solace Advocates</h1>
+        <p>Loading advocates...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main style={{ margin: "24px" }}>
+        <h1>Solace Advocates</h1>
+        <p style={{ color: "red" }}>Error: {error}</p>
+      </main>
+    );
+  }
 
   return (
     <main style={{ margin: "24px" }}>
@@ -76,7 +95,7 @@ export default function Home() {
         <p>
           Searching for: <span>{searchTerm}</span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
+        <input style={{ border: "1px solid black" }} value={searchTerm} onChange={onChange} />
         <button onClick={onClick}>Reset Search</button>
       </div>
       <br />
@@ -95,15 +114,16 @@ export default function Home() {
         </thead>
         <tbody>
           {filteredAdvocates.map((advocate) => {
+            const uniqueKey = `${advocate.firstName}-${advocate.lastName}-${advocate.phoneNumber}`;
             return (
-              <tr>
+              <tr key={uniqueKey}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
                 <td>{advocate.degree}</td>
                 <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
+                  {advocate.specialties.map((specialty) => (
+                    <div key={specialty}>{specialty}</div>
                   ))}
                 </td>
                 <td>{advocate.yearsOfExperience}</td>
