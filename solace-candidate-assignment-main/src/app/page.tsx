@@ -132,7 +132,7 @@ export default function Home(): JSX.Element {
                 <input
                   id="search"
                   type="text"
-                  placeholder="Search by name, city, degree, specialty, experience, or phone..."
+                  placeholder="Search by name, city, degree, specialties, experience, or phone..."
                   value={searchTerm}
                   onChange={onChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
