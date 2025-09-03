@@ -226,10 +226,10 @@ ghcr.io/dyoun/{repo}/solace/packages
 
 ```bash
 # Pull the latest published image
-docker pull ghcr.io/{username}/{repo}/solace-advocates:latest
+docker pull ghcr.io/dyoun/solace/solace-advocates:latest
 
 # Run the published container
-docker run -p 3000:3000 ghcr.io/{username}/{repo}/solace-advocates:latest
+docker run -p 3000:3000 ghcr.io/dyoun/solace/solace-advocates:latest
 ```
 
 ### Deployment Ready
