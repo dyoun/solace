@@ -9,7 +9,7 @@ interface Advocate {
   degree: string;
   specialties: string[];
   yearsOfExperience: number;
-  phoneNumber: string;
+  phoneNumber: number;
 }
 
 export default function Home() {
@@ -48,13 +48,15 @@ export default function Home() {
 
     console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
+      const searchTerm = term.toLowerCase();
       return (
-        advocate.firstName.includes(term) ||
-        advocate.lastName.includes(term) ||
-        advocate.city.includes(term) ||
-        advocate.degree.includes(term) ||
-        advocate.specialties.some(specialty => specialty.includes(term)) ||
-        advocate.yearsOfExperience.toString().includes(term)
+        advocate.firstName.toLowerCase().includes(searchTerm) ||
+        advocate.lastName.toLowerCase().includes(searchTerm) ||
+        advocate.city.toLowerCase().includes(searchTerm) ||
+        advocate.degree.toLowerCase().includes(searchTerm) ||
+        advocate.specialties.some(specialty => specialty.toLowerCase().includes(searchTerm)) ||
+        advocate.yearsOfExperience.toString().includes(searchTerm) ||
+        advocate.phoneNumber.toString().includes(searchTerm)
       );
     });
 
