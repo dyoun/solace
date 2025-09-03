@@ -44,7 +44,7 @@ export default function Home(): JSX.Element {
       }
     };
 
-    void fetchAdvocates();
+    fetchAdvocates();
   }, []);
 
   /**
