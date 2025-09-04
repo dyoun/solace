@@ -7,10 +7,12 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
+Pre-Requisites: node v18.20.8
 
 Install dependencies
 
 ```bash
+cd solace-candidate-assignment-main/
 npm i
 ```
 
