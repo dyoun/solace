@@ -20,6 +20,9 @@ Run the development server:
 npm run dev
 ```
 
+## Improvements
+Typescript improvements are available in [TYPESCRIPT_IMPROVEMENTS](solace-candidate-assignment-main/TYPESCRIPT_IMPROVEMENTS.md)
+
 ## Database set up
 
 The app is configured to return a default list of advocates. This will allow you to get the app up and running without needing to configure a database. If you’d like to configure a database, you’re encouraged to do so. You can uncomment the url in `.env` and the line in `src/app/api/advocates/route.ts` to test retrieving advocates from the database.
@@ -243,3 +246,8 @@ The Docker images are production-ready and can be deployed to:
 - **Railway**, **Fly.io**, **Render**, etc.
 
 The CI/CD pipelines ensure that every code change is automatically tested and containerized, providing a robust deployment workflow for the Solace Advocates application.
+
+
+## Future Optimizations
+* Elasticsearch
+  * instead of using DB queries to search for data, an elasticsearch service offers many more sophisticated search features
