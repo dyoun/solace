@@ -18,7 +18,6 @@ export async function POST(): Promise<NextResponse> {
     }
 
     // TypeScript doesn't know the exact type of db due to conditional setup
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const records = await (db as any).insert(advocates).values(advocateData).returning();
 
     return NextResponse.json({ advocates: records });

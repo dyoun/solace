@@ -2,6 +2,9 @@ import { render, RenderOptions } from '@testing-library/react'
 import { ReactElement } from 'react'
 import type { Advocate } from '@/types'
 
+// Jest globals declaration for TypeScript
+declare const jest: any
+
 // Mock advocate data for testing
 export const mockAdvocates: Advocate[] = [
   {
